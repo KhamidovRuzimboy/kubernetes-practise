@@ -1,0 +1,4 @@
+[webservers]
+34.16.179.162 ansible_user=fmuyassarov
+#[webservers:vars]
+#  ansible_python_interpreter=/usr/bin/python3

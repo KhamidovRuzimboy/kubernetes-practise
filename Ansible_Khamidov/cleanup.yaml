@@ -1,0 +1,39 @@
+- name: uninstall docker and cleanup server
+  hosts: webservers
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Destroy stack
+      community.docker.docker_compose:
+        project_src: /home
+        files:
+        - compose.yaml
+      state: absent
+    - name: delete files on remote server
+      file:
+        path: /home/compose.yaml
+        state: absent
+    - name: Stop Deamon Docker
+      systemd:
+        name: docker.socket
+        state: stopped
+    - name: Destroy stack
+      pip:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - docker
+        - docker-compose
+    - name: Destroy stack
+      apt:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - docker
+        - docker-compose
+     - name: Destroy stack
+       apt:
+        name: docker-ce
+        state: absent
+        purge: true
+        autoremove: yes
